@@ -1,0 +1,31 @@
+$ sudo apt update
+$ sudo apt-get install mariadb-client
+
+$ mysql -h database-1.chik4amgeim1.ap-northeast-2.rds.amazonaws.com -u admin -p
+Enter password: maria1234
+
+MariaDB [(none)]> CREATE DATABASE care;
+
+MariaDB [(none)]> use care;
+
+CREATE TABLE board(
+no int,
+title varchar(100),
+content varchar(200),
+id varchar(20),
+write_date varchar(15),
+hits int,
+file_name varchar(255),
+primary key(no)
+)DEFAULT CHARSET=UTF8;
+
+CREATE TABLE member(
+id varchar(20),
+pw VARCHAR(60),
+user_name varchar(21),
+address varchar(1000),
+mobile varchar(20),
+PRIMARY KEY(id)
+)DEFAULT CHARSET=UTF8;
+
+

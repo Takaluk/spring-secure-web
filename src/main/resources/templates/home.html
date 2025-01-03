@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .user-info { 
+            background-color: #00060c; 
+            border: 1px solid #b3d7ff; 
+            padding: 5px; 
+            border-radius: 5px; 
+            width: 150px; 
+            height: 80px; 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            font-size: 0.7em; 
+            overflow: hidden; 
+        }
+        .user-info p { margin: 2px 0; }
+        .logout-link { 
+            font-size: 0.9em; 
+            display: block;
+            text-align: right;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex-grow: 1;
+            padding-top: 20px;
+        }
+        h2 {
+            color: #555;
+            text-align: center;
+            margin-top: 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+        li {
+            margin: 10px 0;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.2em;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.2em;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .tab {
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .tab.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tab content - added styles */
+        .menu ul, .news ul, .faq ul, .schedule ul {
+            padding-left: 20px;
+        }
+        .menu li, .news li, .faq li, .schedule li {
+            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1em;
+        }
+
+        /* Organization structure */
+        .organization ul {
+            padding-left: 20px;
+        }
+        .organization li {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .user-info {
+                position: static;
+                width: auto;
+                margin: 20px auto;
+            }
+            .board-container {
+                padding-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Our Company</h1>
+        <div class="user-info">
+            <p>안녕하세요, <span th:text="${user.username}"></span>님!</p>
+            <p>소속: <span th:text="${user.department}"></span>, 직급: <span th:text="${user.role}"></span></p>
+            <a class="logout-link" href="/logout">로그아웃</a>
+        </div>
+    </div>
+
+    <div class="board-container">
+        <h2>게시판</h2>
+        <ul>
+            <li><a th:href="'/board/개발'" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
+            <li><a th:href="'/board/인사'" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
+            <li><a th:href="'/board/보안'" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
+        </ul>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <div class="tab active" data-tab="news">최근 소식</div>
+        <div class="tab" data-tab="menu">금일 구내식당 메뉴</div>
+        <div class="tab" data-tab="org">조직도</div>
+        <div class="tab" data-tab="faq">FAQ</div>
+        <div class="tab" data-tab="schedule">사내 일정</div>
+        <div class="tab" data-tab="welfare">직원 복지</div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content active" id="news">
+        <h3>최근 소식</h3>
+        <ul>
+            <li>2025년 신년 맞이 사내 이벤트 개최 예정 - 1월 5일</li>
+            <li>사내 체육대회 결과 발표 - 우승 팀은 '블루팀'!</li>
+            <li>2024년 연말 송년회 후기 - 즐거운 시간 속에서 함께한 순간들</li>
+            <li>새로운 복지 제도 소개 - 직원들의 더 나은 삶을 위한 변화</li>
+            <li>2025년 상반기 프로젝트 회의 일정 안내</li>
+        </ul>
+    </div>
+    
+    <div class="tab-content" id="menu">
+        <h3>금일 구내식당 메뉴</h3>
+        <ul>
+            <li>비빔밥</li>
+            <li>된장찌개</li>
+            <li>불고기</li>
+            <li>김치찌개</li>
+            <li>제육볶음</li>
+            <li>오징어볶음</li>
+            <li>닭갈비</li>
+            <li>된장국</li>
+        </ul>
+    </div>
+    
+    <div class="tab-content" id="org">
+        <h3>조직도</h3>
+        <div class="organization">
+            <ul>
+                <li>CEO
+                    <ul>
+                        <li>HR 부서
+                            <ul>
+                                <li>인사팀</li>
+                            </ul>
+                        </li>
+                        <li>개발 부서
+                            <ul>
+                                <li>프론트엔드 팀</li>
+                                <li>백엔드 팀</li>
+                            </ul>
+                        </li>
+                        <li>보안 부서
+                            <ul>
+                                <li>보안팀</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="faq">
+        <h3>자주 묻는 질문</h3>
+        <ul>
+            <li>Q: 사내 휴가 정책은 어떻게 되나요?</li>
+            <li>A: 연차는 1년마다 15일이 제공됩니다.</li>
+            <li>Q: 근무 시간은 어떻게 되나요?</li>
+            <li>A: 평일 9시부터 6시까지입니다.</li>
+        </ul>
+    </div>
+
+    <div class="tab-content" id="schedule">
+        <h3>사내 일정</h3>
+        <ul>
+            <li>2025년 1월 5일 - 신년 맞이 사내 이벤트</li>
+            <li>2025년 2월 10일 - 사내 체육대회</li>
+        </ul>
+    </div>
+
+    <div class="tab-content" id="welfare">
+        <h3>직원 복지</h3>
+        <ul>
+            <li>연 2회 건강검진</li>
+            <li>직원 운동시설 무료 제공</li>
+            <li>학비 지원 프로그램</li>
+        </ul>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Deactivate all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Activate the clicked tab and corresponding content
+                tab.classList.add('active');
+                const activeContent = document.getElementById(tab.getAttribute('data-tab'));
+                activeContent.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

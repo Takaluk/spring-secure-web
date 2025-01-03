@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${department} + ' 게시판 - 글 작성'">글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin: 10px;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .form-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-container textarea {
+            height: 150px;
+        }
+
+        .form-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .file-input {
+            padding: 8px;
+        }
+
+        .file-label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 th:text="${department} + ' 게시판 - 글 작성'"></h1>
+    <a th:href="'/board/' + ${department}">뒤로 가기</a>
+
+    <div class="form-container">
+        <form th:action="'/board/' + ${department} + '/post'" method="post" enctype="multipart/form-data">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" required>
+            
+            <label for="content">내용</label>
+            <textarea id="content" name="content" required></textarea>
+
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" required>
+
+            <!-- 파일 업로드 필드 -->
+            <label for="file" class="file-label">첨부 파일</label>
+            <input type="file" id="file" name="file" class="file-input" accept="image/*, .pdf, .docx, .txt">
+            
+            <button type="submit">등록</button>
+        </form>
+    </div>
+</body>
+</html>

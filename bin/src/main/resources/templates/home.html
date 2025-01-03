@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .user-info { background-color: #00060c; border: 1px solid #b3d7ff; padding: 5px; border-radius: 5px; width: 150px; height: 80px; position: absolute; top: 10px; right: 10px; font-size: 0.7em; overflow: hidden; } .user-info p { margin: 2px 0; } .logout-link { font-size: 0.9em; }
+        .logout-link {
+            display: block;
+            text-align: right;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex-grow: 1;
+            padding-top: 20px;
+        }
+        h2 {
+            color: #555;
+            text-align: center;
+            margin-top: 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+        li {
+            margin: 10px 0;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.2em; /* 글씨 크기 증가 */
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.2em;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .user-info {
+                position: static;
+                width: auto;
+                margin: 20px auto;
+            }
+            .board-container {
+                padding-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Our Company</h1>
+        <div class="user-info">
+            <p>안녕하세요, <span th:text="${user.username}"></span>님!</p>
+            <p>소속: <span th:text="${user.department}"></span>, 직급: <span th:text="${user.role}"></span></p>
+            <a class="logout-link" href="/logout">로그아웃</a>
+        </div>
+    </div>
+    <div class="board-container">
+        <h2>게시판</h2>
+        <ul>
+            <li><a th:href="'/board/개발'" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
+            <li><a th:href="'/board/인사'" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
+            <li><a th:href="'/board/보안'" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
+        </ul>
+    </div>
+</body>
+</html>

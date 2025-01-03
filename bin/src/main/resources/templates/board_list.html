@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈 페이지</title>
+</head>
+<body>
+    <h1>홈 페이지</h1>
+    <p>안녕하세요, <span th:text="${user.username}"></span>님!</p>
+    <p>소속: <span th:text="${user.department}"></span>, 직급: <span th:text="${user.role}"></span></p>
+    <a href="/logout">로그아웃</a>
+    <h2>게시판</h2>
+    <ul>
+        <li><a th:href="'/board/개발'" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
+        <li><a th:href="'/board/인사'" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
+        <li><a th:href="'/board/보안'" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
+    </ul>
+</body>
+</html>

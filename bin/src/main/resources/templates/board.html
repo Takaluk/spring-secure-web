@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:utext="${department} + ' 게시판'">게시판</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px 0;
+            background-color: #007bff;
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-links a {
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        .post-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .post-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-item h3 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .post-item p {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .file-link {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .file-link:hover {
+            text-decoration: underline;
+        }
+
+        .file-notice {
+            color: gray;
+            font-style: italic;
+        }
+
+        .actions {
+            margin-top: 15px;
+        }
+
+        .actions a,
+        .actions button {
+            margin-right: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .actions button {
+            padding: 6px 12px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .actions button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .delete-form input {
+            margin-right: 10px;
+            padding: 6px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .delete-form button {
+            padding: 6px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-form button:hover {
+            background-color: #c82333;
+        }
+
+        .post-item:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 th:utext="${department} + ' 게시판'"></h1>
+
+    <div class="container">
+        <div class="nav-links">
+            <a href="/">홈으로</a>
+            <a th:href="'/board/' + ${department} + '/post/new'">새 글 작성</a>
+        </div>
+
+        <hr>
+
+        <ul class="post-list">
+            <li th:each="post : ${posts}" class="post-item">
+                <h3 th:utext="${post.title}"></h3>
+                <p>작성자: <span th:utext="${post.author}"></span></p>
+                <p th:utext="${post.content}"></p>
+                
+                <!-- 파일 다운로드 링크 또는 파일 없음 처리 -->
+                <div>
+                    <span th:if="${post.filePath}" class="file-link">
+                        <a th:href="@{'/files/' + ${post.filePath}}" download>파일 다운로드</a>
+                    </span>
+                    <span th:if="${post.filePath == null}" class="file-notice">파일 없음</span>
+                </div>
+                
+                <div class="actions">
+                    <a th:href="'/board/' + ${department} + '/post/' + ${post.id} + '/edit'">수정</a>
+                    
+                    <!-- 삭제 버튼 -->
+                    <form th:action="'/board/' + ${department} + '/post/' + ${post.id} + '/delete'" method="post" class="delete-form" style="display:inline;">
+                        <input type="password" name="password" placeholder="비밀번호" required>
+                        <button type="submit">삭제</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
