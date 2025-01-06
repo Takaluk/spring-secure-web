@@ -5,18 +5,10 @@ import com.example.board.model.User;
 import com.example.board.service.BoardService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -44,10 +36,10 @@ public class BoardController {
     // Board page for a specific department
     @GetMapping("/board/{department}")
     public String board(@PathVariable String department, HttpSession session, Model model) {
-//        User user = (User) session.getAttribute("user");
-//        if (user == null || (!user.getDepartment().equals(department) && !user.getRole().equals("부장"))) {
-//            return "error";
-//        }
+        User user = (User) session.getAttribute("user");
+        if (user == null || (!user.getDepartment().equals(department) && !user.getRole().equals("부장"))) {
+        	return "redirect:/login";
+        }
 
         List<Post> posts = boardService.getPostsByDepartment(department);
         model.addAttribute("posts", posts);
@@ -90,7 +82,6 @@ public String createPost(@PathVariable String department,
             String originalFileName = file.getOriginalFilename();
             Path targetPath = uploadPath.resolve(originalFileName);
             file.transferTo(targetPath);
-            System.out.println("Target file path: " + uploadPath);
 
             // 파일 경로를 Post 객체에 저장
             post.setFilePath(targetPath.toString());  // DB에 저장할 파일 경로 설정

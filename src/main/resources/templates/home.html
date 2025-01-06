@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,7 +82,6 @@
             text-decoration: underline;
         }
 
-        /* Tab styles */
         .tabs {
             display: flex;
             justify-content: center;
@@ -118,40 +117,6 @@
         .tab-content.active {
             display: block;
         }
-
-        /* Tab content - added styles */
-        .menu ul, .news ul, .faq ul, .schedule ul {
-            padding-left: 20px;
-        }
-        .menu li, .news li, .faq li, .schedule li {
-            margin: 10px 0;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 1em;
-        }
-
-        /* Organization structure */
-        .organization ul {
-            padding-left: 20px;
-        }
-        .organization li {
-            margin: 5px 0;
-            font-size: 1.1em;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .user-info {
-                position: static;
-                width: auto;
-                margin: 20px auto;
-            }
-            .board-container {
-                padding-top: 0;
-            }
-        }
     </style>
 </head>
 <body>
@@ -167,9 +132,9 @@
     <div class="board-container">
         <h2>게시판</h2>
         <ul>
-            <li><a th:href="'/board/개발'" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
-            <li><a th:href="'/board/인사'" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
-            <li><a th:href="'/board/보안'" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
+            <li><a th:href="@{/board/개발}" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
+            <li><a th:href="@{/board/인사}" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
+            <li><a th:href="@{/board/보안}" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
         </ul>
     </div>
 
@@ -187,25 +152,14 @@
     <div class="tab-content active" id="news">
         <h3>최근 소식</h3>
         <ul>
-            <li>2025년 신년 맞이 사내 이벤트 개최 예정 - 1월 5일</li>
-            <li>사내 체육대회 결과 발표 - 우승 팀은 '블루팀'!</li>
-            <li>2024년 연말 송년회 후기 - 즐거운 시간 속에서 함께한 순간들</li>
-            <li>새로운 복지 제도 소개 - 직원들의 더 나은 삶을 위한 변화</li>
-            <li>2025년 상반기 프로젝트 회의 일정 안내</li>
+            <li th:each="news : ${newsList}" th:text="${news}"></li>
         </ul>
     </div>
     
     <div class="tab-content" id="menu">
         <h3>금일 구내식당 메뉴</h3>
         <ul>
-            <li>비빔밥</li>
-            <li>된장찌개</li>
-            <li>불고기</li>
-            <li>김치찌개</li>
-            <li>제육볶음</li>
-            <li>오징어볶음</li>
-            <li>닭갈비</li>
-            <li>된장국</li>
+            <li th:each="menu : ${menuList}" th:text="${menu}"></li>
         </ul>
     </div>
     
@@ -213,26 +167,7 @@
         <h3>조직도</h3>
         <div class="organization">
             <ul>
-                <li>CEO
-                    <ul>
-                        <li>HR 부서
-                            <ul>
-                                <li>인사팀</li>
-                            </ul>
-                        </li>
-                        <li>개발 부서
-                            <ul>
-                                <li>프론트엔드 팀</li>
-                                <li>백엔드 팀</li>
-                            </ul>
-                        </li>
-                        <li>보안 부서
-                            <ul>
-                                <li>보안팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+                <li th:each="department : ${organization}" th:text="${department}"></li>
             </ul>
         </div>
     </div>
@@ -240,27 +175,21 @@
     <div class="tab-content" id="faq">
         <h3>자주 묻는 질문</h3>
         <ul>
-            <li>Q: 사내 휴가 정책은 어떻게 되나요?</li>
-            <li>A: 연차는 1년마다 15일이 제공됩니다.</li>
-            <li>Q: 근무 시간은 어떻게 되나요?</li>
-            <li>A: 평일 9시부터 6시까지입니다.</li>
+            <li th:each="faq : ${faqList}" th:text="${faq}"></li>
         </ul>
     </div>
 
     <div class="tab-content" id="schedule">
         <h3>사내 일정</h3>
         <ul>
-            <li>2025년 1월 5일 - 신년 맞이 사내 이벤트</li>
-            <li>2025년 2월 10일 - 사내 체육대회</li>
+            <li th:each="schedule : ${scheduleList}" th:text="${schedule}"></li>
         </ul>
     </div>
 
     <div class="tab-content" id="welfare">
         <h3>직원 복지</h3>
         <ul>
-            <li>연 2회 건강검진</li>
-            <li>직원 운동시설 무료 제공</li>
-            <li>학비 지원 프로그램</li>
+            <li th:each="welfare : ${welfareList}" th:text="${welfare}"></li>
         </ul>
     </div>
 
@@ -270,11 +199,9 @@
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                // Deactivate all tabs and contents
                 tabs.forEach(t => t.classList.remove('active'));
                 contents.forEach(c => c.classList.remove('active'));
 
-                // Activate the clicked tab and corresponding content
                 tab.classList.add('active');
                 const activeContent = document.getElementById(tab.getAttribute('data-tab'));
                 activeContent.classList.add('active');
