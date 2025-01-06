@@ -4,7 +4,7 @@ import com.example.board.model.Post;
 import com.example.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.apache.commons.text.StringEscapeUtils;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +22,12 @@ public class BoardService {
     }
 
     public void savePost(Post post) {
+        String safeTitle = StringEscapeUtils.escapeHtml4(post.getTitle());
+        String safeContent = StringEscapeUtils.escapeHtml4(post.getContent());
+        
+        post.setTitle(safeTitle);
+        post.setContent(safeContent);
+        
         postRepository.save(post);
     }
 

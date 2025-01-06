@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <h1>Admin Login</h1>
-    <form action="/admin/login" method="post">
-		<!--admin_id : admin, admin_pw : admin123-->
+    <form th:action="@{/admin/login}" method="post">
         <label for="adminId">Admin ID:</label>
         <input type="text" id="adminId" name="adminId" required>
         <br>
         <label for="adminPassword">Password:</label>
         <input type="password" id="adminPassword" name="adminPassword" required>
         <br>
+        <div class="g-recaptcha" data-sitekey="6LcOoK4qAAAAADB1ke4UdEz8WMDplpcp4ejWJmbG"></div>
+        <br>
         <button type="submit">Login</button>
     </form>
-    <p style="color:red;">[[${param.error}]]</p>
+    <p th:if="${param.error}" style="color:red;" th:text="${param.error}"></p>
 </body>
 </html>
