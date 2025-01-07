@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <style>
+        .password-cell {
+            -webkit-text-security: disc; /* 크롬, 사파리에서 비밀번호 마스킹 */
+            text-security: disc; /* Firefox에서는 지원되지 않지만 구현 예시로 남겨둡니다 */
+        }
+    </style>
 </head>
 <body>
     <h1>Admin Dashboard</h1>
@@ -19,7 +25,7 @@
                     <th>Username</th>
                     <th>Department</th>
                     <th>Role</th>
-                    <th>Password</th> <!-- 비밀번호 추가 -->
+                    <th>Password</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -29,9 +35,9 @@
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.department}"></td>
                     <td th:text="${user.role}"></td>
-                    <td th:text="${user.password}"></td> <!-- 비밀번호 표시 -->
+                    <td>Hidden</td>
                     <td>
-                        <form th:action="@{/admin/user/{id}/delete(id=${user.id})}" method="post">
+                        <form th:action="@{/secure-admin-4b7f1a2/user/{id}/delete(id=${user.id})}" method="post">
                             <button type="submit">Delete</button>
                         </form>
                     </td>
@@ -48,9 +54,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    <th>Content</th>
                     <th>Author</th>
                     <th>Department</th>
-                    <th>Password</th> <!-- 비밀번호 추가 -->
+                    <th>Password</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -58,11 +65,12 @@
                 <tr th:each="post : ${posts}">
                     <td th:text="${post.id}"></td>
                     <td th:text="${post.title}"></td>
+                    <td th:text="${post.content}"></td>
                     <td th:text="${post.author}"></td>
                     <td th:text="${post.department}"></td>
-                    <td th:text="${post.password}"></td> <!-- 비밀번호 표시 -->
+                    <td>Hidden</td>
                     <td>
-                        <form th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="post">
+                        <form th:action="@{/secure-admin-4b7f1a2/post/{id}/delete(id=${post.id})}" method="post">
                             <button type="submit">Delete</button>
                         </form>
                     </td>
@@ -71,10 +79,12 @@
         </table>
     </section>
 
+    <p style="color:red;" th:text="${param.error}"></p>
+
     <!-- Add New User -->
     <section>
         <h3>Add New User</h3>
-        <form action="/admin/user/add" method="post">
+        <form th:action="@{/secure-admin-4b7f1a2/user/add}" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <br>
@@ -94,7 +104,7 @@
     <!-- Add New Post -->
     <section>
         <h3>Add New Post</h3>
-        <form action="/admin/post/add" method="post">
+        <form th:action="@{/secure-admin-4b7f1a2/post/add}" method="post">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required>
             <br>
@@ -114,17 +124,21 @@
         </form>
     </section>
 
-    <!-- System Command Execution -->
+    <!-- View Logs -->
     <section>
-        <h3>Execute System Command</h3>
-        <form action="/admin/system/command" method="post">
-            <label for="command">Command:</label>
-            <input type="text" id="command" name="command" required>
-            <br>
-            <button type="submit">Execute</button>
-        </form>
+        <h3>View Logs</h3>
         <div>
-            <h4>Command Output:</h4>
+            <form th:action="@{/secure-admin-4b7f1a2/system/command}" method="post">
+                <input type="hidden" name="logType" value="cat /opt/tomcat/tomcat-10/logs/catalina.out">
+                <button type="submit">View Catalina Log</button>
+            </form>
+            <form th:action="@{/secure-admin-4b7f1a2/system/command}" method="post">
+                <input type="hidden" name="logType" th:value="'cat /opt/tomcat/tomcat-10/logs/localhost_access_log.' + ${today} + '.txt'">
+                <button type="submit" th:text="'View Access Log (' + ${today} + ')'"></button>
+            </form>
+        </div>
+        <div>
+            <h4>Log Output:</h4>
             <pre th:text="${commandOutput}"></pre>
         </div>
     </section>

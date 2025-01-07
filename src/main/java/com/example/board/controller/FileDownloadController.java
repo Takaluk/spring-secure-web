@@ -16,12 +16,13 @@ import java.nio.file.Files;
 @RestController
 public class FileDownloadController {
 
-    // 파일 다운로드 요청 처리 (경로 추적 취약점 포함)
     @GetMapping("/files/uploads")
     public ResponseEntity<Resource> downloadFile(@RequestParam String fileName) throws IOException {
-        // 사용자의 입력을 그대로 경로에 사용 (경로 추적 취약점 발생 가능)
-        File file = new File(fileName);  
-
+    	String uploadDir = "uploads";
+    	File file = new File(uploadDir, fileName).getCanonicalFile();
+    	if (!file.getPath().startsWith(new File(uploadDir).getCanonicalPath())) {
+    	    throw new SecurityException("Unauthorized file access.");
+    	}
         if (file.exists()) {
             Resource resource = new FileSystemResource(file);
 

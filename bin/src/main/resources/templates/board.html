@@ -156,13 +156,13 @@
                 <p th:utext="${post.content}"></p>
                 
                 <!-- 파일 다운로드 링크 또는 파일 없음 처리 -->
-                <div>
-                    <span th:if="${post.filePath}" class="file-link">
-                        <a th:href="@{'/files/' + ${post.filePath}}" download>파일 다운로드</a>
-                    </span>
-                    <span th:if="${post.filePath == null}" class="file-notice">파일 없음</span>
-                </div>
-                
+				<div>
+				    <span th:if="${post.filePath}" class="file-link">
+				        <a th:href="@{'/files/uploads?fileName=' + ${post.filePath}}" download>파일 다운로드</a>
+				    </span>
+				    <span th:if="${post.filePath == null}" class="file-notice">파일 없음</span>
+				</div>
+
                 <div class="actions">
                     <a th:href="'/board/' + ${department} + '/post/' + ${post.id} + '/edit'">수정</a>
                     

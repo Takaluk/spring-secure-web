@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/board_db
-    username: root
+    url: jdbc:mariadb://192.168.0.128:3306/board_db
+    username: moon
     password: 1234
   jpa:
     hibernate:
