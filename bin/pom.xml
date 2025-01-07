@@ -9,9 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>spring-vulnerable-web</artifactId>
+	<artifactId>spring-secure-web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-vulnerable-web</name>
+	<packaging>war</packaging>
+	<name>spring-secure-web</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -61,6 +62,11 @@
 		    <artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		      <artifactId>spring-boot-starter-tomcat</artifactId>
+		      <scope>provided</scope> <!-- 안되어 있는 경우 변경! -->
+		</dependency>
+		<dependency>
 		    <groupId>org.mariadb.jdbc</groupId>
 		    <artifactId>mariadb-java-client</artifactId>
 		</dependency>
@@ -68,24 +74,31 @@
 		    <groupId>org.thymeleaf</groupId>
 		    <artifactId>thymeleaf</artifactId>
 		</dependency>
-	    <!-- Spring Boot Starter Thymeleaf -->
 	    <dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-thymeleaf</artifactId>
 	    </dependency>
-	    
-	    <!-- Spring Boot Starter Web -->
 	    <dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-web</artifactId>
 	    </dependency>
-	
-	    <!-- Spring Boot Starter Validation (Optional: for form validation) -->
 	    <dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-validation</artifactId>
 	    </dependency>
-
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-text</artifactId>
+		    <version>1.10.0</version>
+		</dependency>
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-security</artifactId>
+	    </dependency>
+		<dependency>
+		    <groupId>org.thymeleaf.extras</groupId>
+		    <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

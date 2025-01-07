@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,8 +21,22 @@
             text-align: center;
             position: relative;
         }
-        .user-info { background-color: #00060c; border: 1px solid #b3d7ff; padding: 5px; border-radius: 5px; width: 150px; height: 80px; position: absolute; top: 10px; right: 10px; font-size: 0.7em; overflow: hidden; } .user-info p { margin: 2px 0; } .logout-link { font-size: 0.9em; }
-        .logout-link {
+        .user-info { 
+            background-color: #00060c; 
+            border: 1px solid #b3d7ff; 
+            padding: 5px; 
+            border-radius: 5px; 
+            width: 150px; 
+            height: 80px; 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            font-size: 0.7em; 
+            overflow: hidden; 
+        }
+        .user-info p { margin: 2px 0; }
+        .logout-link { 
+            font-size: 0.9em; 
             display: block;
             text-align: right;
             color: #007bff;
@@ -57,7 +71,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 15px;
-            font-size: 1.2em; /* 글씨 크기 증가 */
+            font-size: 1.2em;
         }
         a {
             text-decoration: none;
@@ -67,15 +81,41 @@
         a:hover {
             text-decoration: underline;
         }
-        @media (max-width: 768px) {
-            .user-info {
-                position: static;
-                width: auto;
-                margin: 20px auto;
-            }
-            .board-container {
-                padding-top: 0;
-            }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .tab {
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .tab.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
@@ -88,13 +128,85 @@
             <a class="logout-link" href="/logout">로그아웃</a>
         </div>
     </div>
+
     <div class="board-container">
         <h2>게시판</h2>
         <ul>
-            <li><a th:href="'/board/개발'" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
-            <li><a th:href="'/board/인사'" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
-            <li><a th:href="'/board/보안'" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
+            <li><a th:href="@{/board/개발}" th:if="${user.department == '개발' || user.role == '부장'}">개발 게시판</a></li>
+            <li><a th:href="@{/board/인사}" th:if="${user.department == '인사' || user.role == '부장'}">인사 게시판</a></li>
+            <li><a th:href="@{/board/보안}" th:if="${user.department == '보안' || user.role == '부장'}">보안 게시판</a></li>
         </ul>
     </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <div class="tab active" data-tab="news">최근 소식</div>
+        <div class="tab" data-tab="menu">금일 구내식당 메뉴</div>
+        <div class="tab" data-tab="org">조직도</div>
+        <div class="tab" data-tab="faq">FAQ</div>
+        <div class="tab" data-tab="schedule">사내 일정</div>
+        <div class="tab" data-tab="welfare">직원 복지</div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content active" id="news">
+        <h3>최근 소식</h3>
+        <ul>
+            <li th:each="news : ${newsList}" th:text="${news}"></li>
+        </ul>
+    </div>
+    
+    <div class="tab-content" id="menu">
+        <h3>금일 구내식당 메뉴</h3>
+        <ul>
+            <li th:each="menu : ${menuList}" th:text="${menu}"></li>
+        </ul>
+    </div>
+    
+    <div class="tab-content" id="org">
+        <h3>조직도</h3>
+        <div class="organization">
+            <ul>
+                <li th:each="department : ${organization}" th:text="${department}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="faq">
+        <h3>자주 묻는 질문</h3>
+        <ul>
+            <li th:each="faq : ${faqList}" th:text="${faq}"></li>
+        </ul>
+    </div>
+
+    <div class="tab-content" id="schedule">
+        <h3>사내 일정</h3>
+        <ul>
+            <li th:each="schedule : ${scheduleList}" th:text="${schedule}"></li>
+        </ul>
+    </div>
+
+    <div class="tab-content" id="welfare">
+        <h3>직원 복지</h3>
+        <ul>
+            <li th:each="welfare : ${welfareList}" th:text="${welfare}"></li>
+        </ul>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                const activeContent = document.getElementById(tab.getAttribute('data-tab'));
+                activeContent.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>

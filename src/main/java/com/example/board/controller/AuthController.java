@@ -65,13 +65,13 @@ public class AuthController {
         return "login"; // login.html 반환
     }
 
-    @PostMapping("/perform-login") // URL 변경
+    @PostMapping("/perform-login") 
     public String login(@RequestParam String username, @RequestParam String password, HttpSession session, @RequestParam("g-recaptcha-response") String recaptchaResponse,
     HttpServletRequest request) {
         String clientIp = getClientIp(request);
         loginAttempts.putIfAbsent(clientIp, 0);
 
-        // 로그인 시도 동일IP로 5회 이상 있을 시 에러페이지 리턴
+
         if (loginAttempts.get(clientIp) >= 5) {
             return "redirect:/login?error=locked";
         }

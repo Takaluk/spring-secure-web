@@ -82,13 +82,34 @@
             font-weight: bold;
             margin-top: 10px;
         }
+
+        .g-recaptcha {
+            margin-bottom: 15px;
+        }
     </style>
+    <!-- Google reCAPTCHA API -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <h1 th:text="${department} + ' 게시판 - 글 작성'"></h1>
     <a th:href="'/board/' + ${department}">뒤로 가기</a>
 
     <div class="form-container">
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+
+            // 오류에 맞는 메시지 처리
+            if (error) {
+                if (error === 'Directory_Error') {
+                    alert("디렉토리 처리 중 오류가 발생했습니다.");
+                } else if (error === 'User_Error') {
+                    alert("잘못된 파일 형식이나 경로입니다.");
+                } else {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                }
+            }
+        </script>
         <form th:action="'/board/' + ${department} + '/post'" method="post" enctype="multipart/form-data">
             <label for="title">제목</label>
             <input type="text" id="title" name="title" required>
@@ -103,6 +124,9 @@
             <label for="file" class="file-label">첨부 파일</label>
             <input type="file" id="file" name="file" class="file-input" accept="image/*, .pdf, .docx, .txt">
             
+            <!-- Google reCAPTCHA -->
+            <div class="g-recaptcha" data-sitekey="6LcOoK4qAAAAADB1ke4UdEz8WMDplpcp4ejWJmbG"></div>
+
             <button type="submit">등록</button>
         </form>
     </div>

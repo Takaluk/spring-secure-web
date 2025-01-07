@@ -87,7 +87,6 @@ public class BoardController {
         return "home";
     }
 
-    // Board page for a specific department
     @GetMapping("/board/{department}")
     public String board(@PathVariable String department, HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -108,7 +107,6 @@ public class BoardController {
         return "post_form";
     }
 
-    // Handle form submission to create a new post
     @PostMapping("/board/{department}/post")
 public String createPost(@PathVariable String department, 
                          Post post, 
@@ -116,7 +114,6 @@ public String createPost(@PathVariable String department,
                          @RequestParam("file") MultipartFile file,
                          @RequestParam("g-recaptcha-response") String recaptchaResponse,
                          HttpServletRequest request) throws UnsupportedEncodingException {
-    // Set department for the post
     String clientIp = getClientIp(request);
     loginAttempts.putIfAbsent(clientIp, 0);
 
@@ -130,34 +127,27 @@ public String createPost(@PathVariable String department,
 
     post.setDepartment(department);
     
-    // Optionally, associate the post with the logged-in user
     User user = (User) session.getAttribute("user");
     if (user != null) {
-        post.setAuthor(user.getUsername()); // Assuming Post has an author field
+        post.setAuthor(user.getUsername());
     }
-    System.out.println("Current working directory: " + System.getProperty("user.dir"));
 
     // 파일이 첨부된 경우 처리
     if (!file.isEmpty()) {
         try {
-            
-            // 파일을 저장할 경로 지정 (서버 내의 특정 디렉토리)
-            Path uploadPath = Paths.get("uploads");  // "uploads" 디렉토리로 파일 저장
+            Path uploadPath = Paths.get("uploads");  
             if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);  // 디렉토리가 없으면 생성
+                Files.createDirectories(uploadPath); 
             }
 
             String originalFileName = file.getOriginalFilename();
             if (originalFileName == null) {
                 throw new IllegalArgumentException("파일 이름이 없습니다.");
             }
-            // 파일 확장자 검증
             String extension = originalFileName.substring(originalFileName.lastIndexOf('.') + 1).toLowerCase();
             if (!isAllowedExtension(extension)) {
                 throw new IllegalArgumentException("허용되지 않는 파일 형식입니다.");
             }
-
-            // 파일 경로 제한: "uploads" 디렉토리 외부로 저장 방지
             Path targetPath = uploadPath.resolve(originalFileName).normalize();
             if (!targetPath.startsWith(uploadPath)) {
                 throw new SecurityException("잘못된 파일 경로입니다.");            
@@ -165,11 +155,9 @@ public String createPost(@PathVariable String department,
 
             file.transferTo(targetPath);
 
-            // 파일 경로를 Post 객체에 저장
-            post.setFilePath(targetPath.toString());  // DB에 저장할 파일 경로 설정
+            post.setFilePath(targetPath.toString()); 
         } catch (IOException e) {
             e.printStackTrace();
-            // 파일 처리 중 오류가 발생하면 적절한 예외 처리를 해야 함
             return "redirect:/board/{department}/post/new?error=Directory_Error";
         } catch (IllegalArgumentException | SecurityException e) {
             e.printStackTrace();
