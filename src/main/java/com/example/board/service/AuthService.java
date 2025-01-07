@@ -20,19 +20,21 @@ public class AuthService {
     private EntityManager entityManager;
 
     public Optional<User> login(String username, String password) {
-        String sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'";
-        List<User> users = entityManager.createNativeQuery(sql, User.class).getResultList();
+        String sql = "SELECT * FROM user WHERE username = :username AND password = :password";
+        List<User> users = entityManager.createNativeQuery(sql, User.class)
+                                         .setParameter("username", username)
+                                         .setParameter("password", password)
+                                         .getResultList();
         return users.stream().findFirst();
     }
     
     public Optional<String> findPassword(String username, String department, String role) {
-        // SQL 쿼리를 문자열 결합 방식으로 생성
-        String sql = "SELECT password FROM user WHERE username = '" + username + 
-                     "' AND department = '" + department + 
-                     "' AND role = '" + role + "'";
-
-        // Native Query 실행
-        List<String> passwords = entityManager.createNativeQuery(sql).getResultList();
+        String sql = "SELECT password FROM user WHERE username = :username AND department = :department AND role = :role";
+        List<String> passwords = entityManager.createNativeQuery(sql)
+                                              .setParameter("username", username)
+                                              .setParameter("department", department)
+                                              .setParameter("role", role)
+                                              .getResultList();
         return passwords.stream().findFirst();
     }
 
