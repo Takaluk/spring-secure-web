@@ -37,7 +37,7 @@
                     <td th:text="${user.role}"></td>
                     <td>Hidden</td>
                     <td>
-                        <form th:action="@{/admin/user/{id}/delete(id=${user.id})}" method="post">
+                        <form th:action="@{/secure-admin-4b7f1a2/user/{id}/delete(id=${user.id})}" method="post">
                             <button type="submit">Delete</button>
                         </form>
                     </td>
@@ -70,7 +70,7 @@
                     <td th:text="${post.department}"></td>
                     <td>Hidden</td>
                     <td>
-                        <form th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="post">
+                        <form th:action="@{/secure-admin-4b7f1a2/post/{id}/delete(id=${post.id})}" method="post">
                             <button type="submit">Delete</button>
                         </form>
                     </td>
@@ -84,7 +84,7 @@
     <!-- Add New User -->
     <section>
         <h3>Add New User</h3>
-        <form th:action="@{/admin/user/add}" method="post">
+        <form th:action="@{/secure-admin-4b7f1a2/user/add}" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <br>
@@ -104,7 +104,7 @@
     <!-- Add New Post -->
     <section>
         <h3>Add New Post</h3>
-        <form th:action="@{/admin/post/add}" method="post">
+        <form th:action="@{/secure-admin-4b7f1a2/post/add}" method="post">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required>
             <br>
@@ -128,11 +128,11 @@
     <section>
         <h3>View Logs</h3>
         <div>
-            <form th:action="@{/admin/system/command}" method="post">
+            <form th:action="@{/secure-admin-4b7f1a2/system/command}" method="post">
                 <input type="hidden" name="logType" value="cat /opt/tomcat/tomcat-10/logs/catalina.out">
                 <button type="submit">View Catalina Log</button>
             </form>
-            <form th:action="@{/admin/system/command}" method="post">
+            <form th:action="@{/secure-admin-4b7f1a2/system/command}" method="post">
                 <input type="hidden" name="logType" th:value="'cat /opt/tomcat/tomcat-10/logs/localhost_access_log.' + ${today} + '.txt'">
                 <button type="submit" th:text="'View Access Log (' + ${today} + ')'"></button>
             </form>
