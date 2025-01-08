@@ -12,6 +12,6 @@ public class User {
 
     private String username;
     private String password;
-    private String department; // 개발, 인사, 보안
-    private String role; // 직급: 부장, 사원
+    private String department; 
+    private String role; 
 }

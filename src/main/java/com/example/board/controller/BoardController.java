@@ -69,15 +69,13 @@ public class BoardController {
     }
 
     private boolean isAllowedExtension(String extension) {
-        // 허용할 확장자 목록
         List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "gif", "txt", "mp4", "avi", "mkv");
-        if (extension.equals("java") || extension.equals("php") || extension.equals("sh")) { // 특히 명시적 제외
+        if (extension.equals("java") || extension.equals("php") || extension.equals("sh")) {
             return false;
         }
         return allowedExtensions.contains(extension);
     }
-    
-    // Home page
+
     @GetMapping("/")
     public String home(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -100,7 +98,6 @@ public class BoardController {
         return "board";
     }
 
-    // Page to create a new post
     @GetMapping("/board/{department}/post/new")
     public String newPostPage(@PathVariable String department, Model model) {
         model.addAttribute("department", department);
@@ -132,7 +129,6 @@ public String createPost(@PathVariable String department,
         post.setAuthor(user.getUsername());
     }
 
-    // 파일이 첨부된 경우 처리
     if (!file.isEmpty()) {
         try {
             Path uploadPath = Paths.get("uploads");  
@@ -161,20 +157,16 @@ public String createPost(@PathVariable String department,
             return "redirect:/board/{department}/post/new?error=Directory_Error";
         } catch (IllegalArgumentException | SecurityException e) {
             e.printStackTrace();
-            // 사용자 오류 처리
             return "redirect:/board/{department}/post/new?error=User_Error";
         }
     }
 
-    // DB에 Post 객체 저장 (예: postRepository.save(post) 등)
     boardService.savePost(post);
 
-    // Redirect back to the department's board, ensuring the department name is URL-encoded
     String encodedDepartment = URLEncoder.encode(department, "UTF-8");
     return "redirect:/board/" + encodedDepartment;
 }
 
-    // Handle deleting a post
     @PostMapping("/board/{department}/post/{id}/delete")
     public String deletePost(@PathVariable String department, @PathVariable Long id, @RequestParam String password) throws UnsupportedEncodingException {
         boardService.getPostById(id).ifPresent(post -> {
@@ -183,27 +175,22 @@ public String createPost(@PathVariable String department,
             }
         });
 
-        // URL-encode the department name in case it contains special characters
         String encodedDepartment = URLEncoder.encode(department, "UTF-8");
         return "redirect:/board/" + encodedDepartment;
     }
 
     @GetMapping("/board/{department}/post/{id}/edit")
     public String showEditForm(@PathVariable String department, @PathVariable Long id, Model model) {
-        // 게시글 가져오기
         boardService.getPostById(id).ifPresentOrElse(
             post -> {
-                // 게시글이 존재하면 모델에 추가하고 수정 페이지로 이동
                 model.addAttribute("post", post);
                 model.addAttribute("department", department);
             },
             () -> {
-                // 게시글이 존재하지 않으면 게시판 페이지로 리디렉션
                 model.addAttribute("department", department);
             }
         );
-        // 결과적으로 수정 페이지로 이동하거나 게시판으로 리디렉션
-        return "post_edit";  // 수정 페이지로 이동, 게시글이 없으면 자동으로 리디렉션됨
+        return "post_edit";
     }
 
     

@@ -14,9 +14,9 @@ public class Post {
     private String title;
     private String content;
 
-    private String author; // 작성자
-    private String password; // 글 비밀번호
+    private String author; 
+    private String password; 
 
-    private String department; // 게시판 부서
-    private String filePath; // 파일경로 및 이름
+    private String department; 
+    private String filePath; 
 }

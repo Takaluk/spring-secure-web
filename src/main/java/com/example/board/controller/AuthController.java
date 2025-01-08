@@ -62,7 +62,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login"; // login.html 반환
+        return "login"; 
     }
 
     @PostMapping("/perform-login") 
@@ -97,7 +97,7 @@ public class AuthController {
     
     @GetMapping("/find-password")
     public String findPasswordPage() {
-        return "find-password"; // find-password.html 반환
+        return "find-password";
     }
 
     @PostMapping("/find-password")
@@ -109,7 +109,7 @@ public class AuthController {
         return authService.findPassword(username, department, role)
                 .map(password -> {
                     model.addAttribute("password", password);
-                    return "password-result"; // password-result.html 반환
+                    return "password-result";
                 })
                 .orElse("redirect:/find-password?error");
     }
